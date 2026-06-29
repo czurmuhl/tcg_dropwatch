@@ -15,8 +15,10 @@ import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutWatchlistRouteImport } from './routes/_layout/watchlist'
+import { Route as LayoutSourcesRouteImport } from './routes/_layout/sources'
+import { Route as LayoutSignalsRouteImport } from './routes/_layout/signals'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
-import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
 
 const SignupRoute = SignupRouteImport.update({
@@ -48,14 +50,24 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutWatchlistRoute = LayoutWatchlistRouteImport.update({
+  id: '/watchlist',
+  path: '/watchlist',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutSourcesRoute = LayoutSourcesRouteImport.update({
+  id: '/sources',
+  path: '/sources',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutSignalsRoute = LayoutSignalsRouteImport.update({
+  id: '/signals',
+  path: '/signals',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutItemsRoute = LayoutItemsRouteImport.update({
-  id: '/items',
-  path: '/items',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutAdminRoute = LayoutAdminRouteImport.update({
@@ -65,14 +77,16 @@ const LayoutAdminRoute = LayoutAdminRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof LayoutIndexRoute
   '/login': typeof LoginRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof LayoutAdminRoute
-  '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
-  '/': typeof LayoutIndexRoute
+  '/signals': typeof LayoutSignalsRoute
+  '/sources': typeof LayoutSourcesRoute
+  '/watchlist': typeof LayoutWatchlistRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -80,8 +94,10 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof LayoutAdminRoute
-  '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
+  '/signals': typeof LayoutSignalsRoute
+  '/sources': typeof LayoutSourcesRoute
+  '/watchlist': typeof LayoutWatchlistRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
@@ -92,21 +108,25 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_layout/admin': typeof LayoutAdminRoute
-  '/_layout/items': typeof LayoutItemsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
+  '/_layout/signals': typeof LayoutSignalsRoute
+  '/_layout/sources': typeof LayoutSourcesRoute
+  '/_layout/watchlist': typeof LayoutWatchlistRoute
   '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/login'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
     | '/admin'
-    | '/items'
     | '/settings'
-    | '/'
+    | '/signals'
+    | '/sources'
+    | '/watchlist'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -114,8 +134,10 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/admin'
-    | '/items'
     | '/settings'
+    | '/signals'
+    | '/sources'
+    | '/watchlist'
     | '/'
   id:
     | '__root__'
@@ -125,8 +147,10 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/_layout/admin'
-    | '/_layout/items'
     | '/_layout/settings'
+    | '/_layout/signals'
+    | '/_layout/sources'
+    | '/_layout/watchlist'
     | '/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -171,7 +195,7 @@ declare module '@tanstack/react-router' {
     '/_layout': {
       id: '/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -182,18 +206,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/watchlist': {
+      id: '/_layout/watchlist'
+      path: '/watchlist'
+      fullPath: '/watchlist'
+      preLoaderRoute: typeof LayoutWatchlistRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/sources': {
+      id: '/_layout/sources'
+      path: '/sources'
+      fullPath: '/sources'
+      preLoaderRoute: typeof LayoutSourcesRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/signals': {
+      id: '/_layout/signals'
+      path: '/signals'
+      fullPath: '/signals'
+      preLoaderRoute: typeof LayoutSignalsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/settings': {
       id: '/_layout/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof LayoutSettingsRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/items': {
-      id: '/_layout/items'
-      path: '/items'
-      fullPath: '/items'
-      preLoaderRoute: typeof LayoutItemsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/admin': {
@@ -208,15 +246,19 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutAdminRoute: typeof LayoutAdminRoute
-  LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
+  LayoutSignalsRoute: typeof LayoutSignalsRoute
+  LayoutSourcesRoute: typeof LayoutSourcesRoute
+  LayoutWatchlistRoute: typeof LayoutWatchlistRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAdminRoute: LayoutAdminRoute,
-  LayoutItemsRoute: LayoutItemsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
+  LayoutSignalsRoute: LayoutSignalsRoute,
+  LayoutSourcesRoute: LayoutSourcesRoute,
+  LayoutWatchlistRoute: LayoutWatchlistRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 

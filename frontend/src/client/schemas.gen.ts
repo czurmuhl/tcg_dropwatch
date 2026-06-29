@@ -57,75 +57,124 @@ export const Body_login_login_access_tokenSchema = {
     title: 'Body_login-login_access_token'
 } as const;
 
-export const HTTPValidationErrorSchema = {
+export const DropSignalCreateSchema = {
     properties: {
-        detail: {
-            items: {
-                '$ref': '#/components/schemas/ValidationError'
-            },
-            type: 'array',
-            title: 'Detail'
-        }
-    },
-    type: 'object',
-    title: 'HTTPValidationError'
-} as const;
-
-export const ItemCreateSchema = {
-    properties: {
-        title: {
+        product_id: {
             type: 'string',
-            maxLength: 255,
-            minLength: 1,
-            title: 'Title'
+            format: 'uuid',
+            title: 'Product Id'
         },
-        description: {
+        source_id: {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 255
+                    format: 'uuid'
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Description'
-        }
-    },
-    type: 'object',
-    required: ['title'],
-    title: 'ItemCreate'
-} as const;
-
-export const ItemPublicSchema = {
-    properties: {
-        title: {
-            type: 'string',
-            maxLength: 255,
-            minLength: 1,
-            title: 'Title'
+            title: 'Source Id'
         },
-        description: {
+        observed_price: {
+            type: 'number',
+            exclusiveMinimum: 0,
+            title: 'Observed Price'
+        },
+        stock_status: {
+            type: 'string',
+            maxLength: 80,
+            minLength: 1,
+            title: 'Stock Status'
+        },
+        source_type: {
+            type: 'string',
+            maxLength: 40,
+            minLength: 1,
+            title: 'Source Type',
+            default: 'manual'
+        },
+        url: {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 255
+                    maxLength: 2048
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Description'
+            title: 'Url'
+        },
+        observed_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Observed At'
+        }
+    },
+    type: 'object',
+    required: ['product_id', 'observed_price', 'stock_status'],
+    title: 'DropSignalCreate'
+} as const;
+
+export const DropSignalPublicSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        source_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source Id'
+        },
+        observed_price: {
+            type: 'number',
+            exclusiveMinimum: 0,
+            title: 'Observed Price'
+        },
+        stock_status: {
+            type: 'string',
+            maxLength: 80,
+            minLength: 1,
+            title: 'Stock Status'
+        },
+        source_type: {
+            type: 'string',
+            maxLength: 40,
+            minLength: 1,
+            title: 'Source Type',
+            default: 'manual'
+        },
+        url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Url'
+        },
+        observed_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Observed At'
         },
         id: {
             type: 'string',
             format: 'uuid',
             title: 'Id'
-        },
-        owner_id: {
-            type: 'string',
-            format: 'uuid',
-            title: 'Owner Id'
         },
         created_at: {
             anyOf: [
@@ -141,47 +190,15 @@ export const ItemPublicSchema = {
         }
     },
     type: 'object',
-    required: ['title', 'id', 'owner_id'],
-    title: 'ItemPublic'
+    required: ['product_id', 'observed_price', 'stock_status', 'id'],
+    title: 'DropSignalPublic'
 } as const;
 
-export const ItemUpdateSchema = {
-    properties: {
-        title: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 255,
-                    minLength: 1
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Title'
-        },
-        description: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 255
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Description'
-        }
-    },
-    type: 'object',
-    title: 'ItemUpdate'
-} as const;
-
-export const ItemsPublicSchema = {
+export const DropSignalsPublicSchema = {
     properties: {
         data: {
             items: {
-                '$ref': '#/components/schemas/ItemPublic'
+                '$ref': '#/components/schemas/DropSignalPublic'
             },
             type: 'array',
             title: 'Data'
@@ -193,7 +210,21 @@ export const ItemsPublicSchema = {
     },
     type: 'object',
     required: ['data', 'count'],
-    title: 'ItemsPublic'
+    title: 'DropSignalsPublic'
+} as const;
+
+export const HTTPValidationErrorSchema = {
+    properties: {
+        detail: {
+            items: {
+                '$ref': '#/components/schemas/ValidationError'
+            },
+            type: 'array',
+            title: 'Detail'
+        }
+    },
+    type: 'object',
+    title: 'HTTPValidationError'
 } as const;
 
 export const MessageSchema = {
@@ -249,6 +280,465 @@ export const PrivateUserCreateSchema = {
     type: 'object',
     required: ['email', 'password', 'full_name'],
     title: 'PrivateUserCreate'
+} as const;
+
+export const ProductCreateSchema = {
+    properties: {
+        game: {
+            type: 'string',
+            maxLength: 80,
+            minLength: 1,
+            title: 'Game'
+        },
+        name: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Name'
+        },
+        product_type: {
+            type: 'string',
+            maxLength: 120,
+            minLength: 1,
+            title: 'Product Type'
+        },
+        msrp: {
+            type: 'number',
+            exclusiveMinimum: 0,
+            title: 'Msrp'
+        },
+        image_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Image Url'
+        }
+    },
+    type: 'object',
+    required: ['game', 'name', 'product_type', 'msrp'],
+    title: 'ProductCreate'
+} as const;
+
+export const ProductPublicSchema = {
+    properties: {
+        game: {
+            type: 'string',
+            maxLength: 80,
+            minLength: 1,
+            title: 'Game'
+        },
+        name: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Name'
+        },
+        product_type: {
+            type: 'string',
+            maxLength: 120,
+            minLength: 1,
+            title: 'Product Type'
+        },
+        msrp: {
+            type: 'number',
+            exclusiveMinimum: 0,
+            title: 'Msrp'
+        },
+        image_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Image Url'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        created_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Created At'
+        }
+    },
+    type: 'object',
+    required: ['game', 'name', 'product_type', 'msrp', 'id'],
+    title: 'ProductPublic'
+} as const;
+
+export const ProductUpdateSchema = {
+    properties: {
+        game: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 80,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Game'
+        },
+        name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Name'
+        },
+        product_type: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 120,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Product Type'
+        },
+        msrp: {
+            anyOf: [
+                {
+                    type: 'number',
+                    exclusiveMinimum: 0
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Msrp'
+        },
+        image_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Image Url'
+        }
+    },
+    type: 'object',
+    title: 'ProductUpdate'
+} as const;
+
+export const ProductsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/ProductPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'ProductsPublic'
+} as const;
+
+export const RetailerSourceCreateSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        retailer_name: {
+            type: 'string',
+            maxLength: 120,
+            minLength: 1,
+            title: 'Retailer Name'
+        },
+        url: {
+            type: 'string',
+            maxLength: 2048,
+            minLength: 1,
+            title: 'Url'
+        },
+        price_selector: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Price Selector'
+        },
+        stock_selector: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Selector'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        }
+    },
+    type: 'object',
+    required: ['product_id', 'retailer_name', 'url'],
+    title: 'RetailerSourceCreate'
+} as const;
+
+export const RetailerSourcePublicSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        retailer_name: {
+            type: 'string',
+            maxLength: 120,
+            minLength: 1,
+            title: 'Retailer Name'
+        },
+        url: {
+            type: 'string',
+            maxLength: 2048,
+            minLength: 1,
+            title: 'Url'
+        },
+        price_selector: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Price Selector'
+        },
+        stock_selector: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Selector'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        created_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Created At'
+        }
+    },
+    type: 'object',
+    required: ['product_id', 'retailer_name', 'url', 'id'],
+    title: 'RetailerSourcePublic'
+} as const;
+
+export const RetailerSourceUpdateSchema = {
+    properties: {
+        product_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Product Id'
+        },
+        retailer_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 120,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Retailer Name'
+        },
+        url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Url'
+        },
+        price_selector: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Price Selector'
+        },
+        stock_selector: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Selector'
+        },
+        is_active: {
+            anyOf: [
+                {
+                    type: 'boolean'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Is Active'
+        }
+    },
+    type: 'object',
+    title: 'RetailerSourceUpdate'
+} as const;
+
+export const RetailerSourcesPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/RetailerSourcePublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'RetailerSourcesPublic'
+} as const;
+
+export const ScrapeRunPublicSchema = {
+    properties: {
+        message: {
+            type: 'string',
+            title: 'Message'
+        },
+        source_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source Id'
+        }
+    },
+    type: 'object',
+    required: ['message'],
+    title: 'ScrapeRunPublic'
+} as const;
+
+export const ScrapeRunRequestSchema = {
+    properties: {
+        source_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source Id'
+        }
+    },
+    type: 'object',
+    title: 'ScrapeRunRequest'
 } as const;
 
 export const TokenSchema = {
@@ -556,4 +1046,171 @@ export const ValidationErrorSchema = {
     type: 'object',
     required: ['loc', 'msg', 'type'],
     title: 'ValidationError'
+} as const;
+
+export const WatchlistCreateSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        msrp_margin_percent: {
+            type: 'number',
+            minimum: 0,
+            title: 'Msrp Margin Percent',
+            default: 10
+        },
+        max_price: {
+            anyOf: [
+                {
+                    type: 'number',
+                    exclusiveMinimum: 0
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Max Price'
+        },
+        email_enabled: {
+            type: 'boolean',
+            title: 'Email Enabled',
+            default: true
+        }
+    },
+    type: 'object',
+    required: ['product_id'],
+    title: 'WatchlistCreate'
+} as const;
+
+export const WatchlistPublicSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        msrp_margin_percent: {
+            type: 'number',
+            minimum: 0,
+            title: 'Msrp Margin Percent',
+            default: 10
+        },
+        max_price: {
+            anyOf: [
+                {
+                    type: 'number',
+                    exclusiveMinimum: 0
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Max Price'
+        },
+        email_enabled: {
+            type: 'boolean',
+            title: 'Email Enabled',
+            default: true
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        owner_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Owner Id'
+        },
+        created_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Created At'
+        }
+    },
+    type: 'object',
+    required: ['product_id', 'id', 'owner_id'],
+    title: 'WatchlistPublic'
+} as const;
+
+export const WatchlistUpdateSchema = {
+    properties: {
+        product_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Product Id'
+        },
+        msrp_margin_percent: {
+            anyOf: [
+                {
+                    type: 'number',
+                    minimum: 0
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Msrp Margin Percent'
+        },
+        max_price: {
+            anyOf: [
+                {
+                    type: 'number',
+                    exclusiveMinimum: 0
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Max Price'
+        },
+        email_enabled: {
+            anyOf: [
+                {
+                    type: 'boolean'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Email Enabled'
+        }
+    },
+    type: 'object',
+    title: 'WatchlistUpdate'
+} as const;
+
+export const WatchlistsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/WatchlistPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'WatchlistsPublic'
 } as const;

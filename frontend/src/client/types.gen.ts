@@ -9,31 +9,35 @@ export type Body_login_login_access_token = {
     client_secret?: (string | null);
 };
 
-export type HTTPValidationError = {
-    detail?: Array<ValidationError>;
+export type DropSignalCreate = {
+    product_id: string;
+    source_id?: (string | null);
+    observed_price: number;
+    stock_status: string;
+    source_type?: string;
+    url?: (string | null);
+    observed_at?: string;
 };
 
-export type ItemCreate = {
-    title: string;
-    description?: (string | null);
-};
-
-export type ItemPublic = {
-    title: string;
-    description?: (string | null);
+export type DropSignalPublic = {
+    product_id: string;
+    source_id?: (string | null);
+    observed_price: number;
+    stock_status: string;
+    source_type?: string;
+    url?: (string | null);
+    observed_at?: string;
     id: string;
-    owner_id: string;
     created_at?: (string | null);
 };
 
-export type ItemsPublic = {
-    data: Array<ItemPublic>;
+export type DropSignalsPublic = {
+    data: Array<DropSignalPublic>;
     count: number;
 };
 
-export type ItemUpdate = {
-    title?: (string | null);
-    description?: (string | null);
+export type HTTPValidationError = {
+    detail?: Array<ValidationError>;
 };
 
 export type Message = {
@@ -50,6 +54,80 @@ export type PrivateUserCreate = {
     password: string;
     full_name: string;
     is_verified?: boolean;
+};
+
+export type ProductCreate = {
+    game: string;
+    name: string;
+    product_type: string;
+    msrp: number;
+    image_url?: (string | null);
+};
+
+export type ProductPublic = {
+    game: string;
+    name: string;
+    product_type: string;
+    msrp: number;
+    image_url?: (string | null);
+    id: string;
+    created_at?: (string | null);
+};
+
+export type ProductsPublic = {
+    data: Array<ProductPublic>;
+    count: number;
+};
+
+export type ProductUpdate = {
+    game?: (string | null);
+    name?: (string | null);
+    product_type?: (string | null);
+    msrp?: (number | null);
+    image_url?: (string | null);
+};
+
+export type RetailerSourceCreate = {
+    product_id: string;
+    retailer_name: string;
+    url: string;
+    price_selector?: (string | null);
+    stock_selector?: (string | null);
+    is_active?: boolean;
+};
+
+export type RetailerSourcePublic = {
+    product_id: string;
+    retailer_name: string;
+    url: string;
+    price_selector?: (string | null);
+    stock_selector?: (string | null);
+    is_active?: boolean;
+    id: string;
+    created_at?: (string | null);
+};
+
+export type RetailerSourcesPublic = {
+    data: Array<RetailerSourcePublic>;
+    count: number;
+};
+
+export type RetailerSourceUpdate = {
+    product_id?: (string | null);
+    retailer_name?: (string | null);
+    url?: (string | null);
+    price_selector?: (string | null);
+    stock_selector?: (string | null);
+    is_active?: (boolean | null);
+};
+
+export type ScrapeRunPublic = {
+    message: string;
+    source_id?: (string | null);
+};
+
+export type ScrapeRunRequest = {
+    source_id?: (string | null);
 };
 
 export type Token = {
@@ -113,37 +191,34 @@ export type ValidationError = {
     };
 };
 
-export type ItemsReadItemsData = {
-    limit?: number;
-    skip?: number;
+export type WatchlistCreate = {
+    product_id: string;
+    msrp_margin_percent?: number;
+    max_price?: (number | null);
+    email_enabled?: boolean;
 };
 
-export type ItemsReadItemsResponse = (ItemsPublic);
-
-export type ItemsCreateItemData = {
-    requestBody: ItemCreate;
-};
-
-export type ItemsCreateItemResponse = (ItemPublic);
-
-export type ItemsReadItemData = {
+export type WatchlistPublic = {
+    product_id: string;
+    msrp_margin_percent?: number;
+    max_price?: (number | null);
+    email_enabled?: boolean;
     id: string;
+    owner_id: string;
+    created_at?: (string | null);
 };
 
-export type ItemsReadItemResponse = (ItemPublic);
-
-export type ItemsUpdateItemData = {
-    id: string;
-    requestBody: ItemUpdate;
+export type WatchlistsPublic = {
+    data: Array<WatchlistPublic>;
+    count: number;
 };
 
-export type ItemsUpdateItemResponse = (ItemPublic);
-
-export type ItemsDeleteItemData = {
-    id: string;
+export type WatchlistUpdate = {
+    product_id?: (string | null);
+    msrp_margin_percent?: (number | null);
+    max_price?: (number | null);
+    email_enabled?: (boolean | null);
 };
-
-export type ItemsDeleteItemResponse = (Message);
 
 export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;
@@ -176,6 +251,101 @@ export type PrivateCreateUserData = {
 };
 
 export type PrivateCreateUserResponse = (UserPublic);
+
+export type ProductsReadProductsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type ProductsReadProductsResponse = (ProductsPublic);
+
+export type ProductsCreateProductData = {
+    requestBody: ProductCreate;
+};
+
+export type ProductsCreateProductResponse = (ProductPublic);
+
+export type ProductsReadProductData = {
+    id: string;
+};
+
+export type ProductsReadProductResponse = (ProductPublic);
+
+export type ProductsUpdateProductData = {
+    id: string;
+    requestBody: ProductUpdate;
+};
+
+export type ProductsUpdateProductResponse = (ProductPublic);
+
+export type ProductsDeleteProductData = {
+    id: string;
+};
+
+export type ProductsDeleteProductResponse = (Message);
+
+export type ScrapesRunScrapeData = {
+    requestBody?: (ScrapeRunRequest | null);
+};
+
+export type ScrapesRunScrapeResponse = (ScrapeRunPublic);
+
+export type SignalsReadSignalsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type SignalsReadSignalsResponse = (DropSignalsPublic);
+
+export type SignalsCreateSignalData = {
+    requestBody: DropSignalCreate;
+};
+
+export type SignalsCreateSignalResponse = (DropSignalPublic);
+
+export type SignalsReadSignalData = {
+    id: string;
+};
+
+export type SignalsReadSignalResponse = (DropSignalPublic);
+
+export type SignalsDeleteSignalData = {
+    id: string;
+};
+
+export type SignalsDeleteSignalResponse = (Message);
+
+export type SourcesReadSourcesData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type SourcesReadSourcesResponse = (RetailerSourcesPublic);
+
+export type SourcesCreateSourceData = {
+    requestBody: RetailerSourceCreate;
+};
+
+export type SourcesCreateSourceResponse = (RetailerSourcePublic);
+
+export type SourcesReadSourceData = {
+    id: string;
+};
+
+export type SourcesReadSourceResponse = (RetailerSourcePublic);
+
+export type SourcesUpdateSourceData = {
+    id: string;
+    requestBody: RetailerSourceUpdate;
+};
+
+export type SourcesUpdateSourceResponse = (RetailerSourcePublic);
+
+export type SourcesDeleteSourceData = {
+    id: string;
+};
+
+export type SourcesDeleteSourceResponse = (Message);
 
 export type UsersReadUsersData = {
     limit?: number;
@@ -238,3 +408,35 @@ export type UtilsTestEmailData = {
 export type UtilsTestEmailResponse = (Message);
 
 export type UtilsHealthCheckResponse = (boolean);
+
+export type WatchlistsReadWatchlistsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type WatchlistsReadWatchlistsResponse = (WatchlistsPublic);
+
+export type WatchlistsCreateWatchlistData = {
+    requestBody: WatchlistCreate;
+};
+
+export type WatchlistsCreateWatchlistResponse = (WatchlistPublic);
+
+export type WatchlistsReadWatchlistData = {
+    id: string;
+};
+
+export type WatchlistsReadWatchlistResponse = (WatchlistPublic);
+
+export type WatchlistsUpdateWatchlistData = {
+    id: string;
+    requestBody: WatchlistUpdate;
+};
+
+export type WatchlistsUpdateWatchlistResponse = (WatchlistPublic);
+
+export type WatchlistsDeleteWatchlistData = {
+    id: string;
+};
+
+export type WatchlistsDeleteWatchlistResponse = (Message);

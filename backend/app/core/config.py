@@ -1,5 +1,6 @@
 import secrets
 import warnings
+from pathlib import Path
 from typing import Annotated, Any, Literal, Self
 
 from pydantic import (
@@ -14,6 +15,14 @@ from pydantic import (
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+def find_dotenv() -> Path:
+    current_file = Path(__file__).resolve()
+    return next(
+        (parent / ".env" for parent in current_file.parents if (parent / ".env").exists()),
+        current_file.parents[2] / ".env",
+    )
+
+
 def parse_cors(v: Any) -> list[str] | str:
     if isinstance(v, str) and not v.startswith("["):
         return [i.strip() for i in v.split(",") if i.strip()]
@@ -24,8 +33,7 @@ def parse_cors(v: Any) -> list[str] | str:
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        # Use top level .env file (one level above ./backend/)
-        env_file="../.env",
+        env_file=find_dotenv(),
         env_ignore_empty=True,
         extra="ignore",
     )

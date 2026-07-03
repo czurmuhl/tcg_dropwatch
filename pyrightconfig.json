@@ -1,0 +1,18 @@
+{
+  "include": [
+    "backend/app",
+    "backend/tests"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "backend/app/alembic/versions"
+  ],
+  "venvPath": ".",
+  "venv": ".tcgdropwatch",
+  "pythonVersion": "3.14",
+  "executionEnvironments": [
+    {
+      "root": "backend"
+    }
+  ]
+}

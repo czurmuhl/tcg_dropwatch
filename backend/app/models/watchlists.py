@@ -19,7 +19,11 @@ class WatchlistBase(SQLModel):
     product_id: uuid.UUID = Field(foreign_key="product.id", ondelete="CASCADE")
     msrp_margin_percent: float = Field(default=10, ge=0)
     max_price: float | None = Field(default=None, gt=0)
+    is_active: bool = True
     email_enabled: bool = True
+    notify_on_restock: bool = True
+    notify_on_price_drop: bool = True
+    notification_cooldown_minutes: int = Field(default=60, ge=0, le=10080)
 
 
 class WatchlistCreate(WatchlistBase):
@@ -30,7 +34,11 @@ class WatchlistUpdate(SQLModel):
     product_id: uuid.UUID | None = None
     msrp_margin_percent: float | None = Field(default=None, ge=0)
     max_price: float | None = Field(default=None, gt=0)
+    is_active: bool | None = None
     email_enabled: bool | None = None
+    notify_on_restock: bool | None = None
+    notify_on_price_drop: bool | None = None
+    notification_cooldown_minutes: int | None = Field(default=None, ge=0, le=10080)
 
 
 class Watchlist(WatchlistBase, table=True):

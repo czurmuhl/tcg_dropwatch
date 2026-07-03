@@ -18,7 +18,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 def find_dotenv() -> Path:
     current_file = Path(__file__).resolve()
     return next(
-        (parent / ".env" for parent in current_file.parents if (parent / ".env").exists()),
+        (
+            parent / ".env"
+            for parent in current_file.parents
+            if (parent / ".env").exists()
+        ),
         current_file.parents[2] / ".env",
     )
 

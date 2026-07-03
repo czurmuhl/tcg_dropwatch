@@ -25,7 +25,12 @@ from app.models.catalog.sources import (
     RetailerSourceUpdate,
 )
 from app.models.common import Message, get_datetime_utc
-from app.models.scrapes import ScrapeRunPublic, ScrapeRunRequest
+from app.models.scrapes import (
+    ScrapeRunPublic,
+    ScrapeRunRequest,
+    SimulatedTwitterDropPublic,
+    SimulatedTwitterDropsPublic,
+)
 from app.models.signals import (
     DropSignal,
     DropSignalBase,
@@ -83,6 +88,8 @@ __all__ = [
     "SQLModel",
     "ScrapeRunPublic",
     "ScrapeRunRequest",
+    "SimulatedTwitterDropPublic",
+    "SimulatedTwitterDropsPublic",
     "Token",
     "TokenPayload",
     "UpdatePassword",

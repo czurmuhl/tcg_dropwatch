@@ -29,7 +29,7 @@ def _validate_signal_references(
     source = session.get(RetailerSource, source_id)
     if not source:
         raise HTTPException(status_code=404, detail="Source not found")
-    if source.product_id != product_id:
+    if source.product_id is not None and source.product_id != product_id:
         raise HTTPException(status_code=400, detail="Source does not belong to product")
 
 

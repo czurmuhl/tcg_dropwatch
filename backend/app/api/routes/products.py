@@ -2,6 +2,7 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import or_
 from sqlmodel import col, func, select
 
 from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
@@ -19,15 +20,34 @@ router = APIRouter(prefix="/products", tags=["products"])
 
 @router.get("/", response_model=ProductsPublic)
 def read_products(
-    session: SessionDep, _current_user: CurrentUser, skip: int = 0, limit: int = 100
+    session: SessionDep,
+    _current_user: CurrentUser,
+    skip: int = 0,
+    limit: int = 100,
+    q: str | None = None,
+    game: str | None = None,
+    product_type: str | None = None,
 ) -> Any:
     count_statement = select(func.count()).select_from(Product)
+    statement = select(Product)
+    if q:
+        search = f"%{q}%"
+        search_filter = or_(
+            col(Product.name).ilike(search),
+            col(Product.game).ilike(search),
+            col(Product.product_type).ilike(search),
+        )
+        count_statement = count_statement.where(search_filter)
+        statement = statement.where(search_filter)
+    if game:
+        count_statement = count_statement.where(Product.game == game)
+        statement = statement.where(Product.game == game)
+    if product_type:
+        count_statement = count_statement.where(Product.product_type == product_type)
+        statement = statement.where(Product.product_type == product_type)
     count = session.exec(count_statement).one()
     statement = (
-        select(Product)
-        .order_by(col(Product.created_at).desc())
-        .offset(skip)
-        .limit(limit)
+        statement.order_by(col(Product.created_at).desc()).offset(skip).limit(limit)
     )
     products = session.exec(statement).all()
     return ProductsPublic(

@@ -12,6 +12,7 @@ from app.models.common import get_datetime_utc
 
 if TYPE_CHECKING:
     from app.models.alerts import AlertEvent
+    from app.models.catalog.sources import RetailerSource
     from app.models.watchlists import Watchlist
 
 
@@ -55,6 +56,9 @@ class User(UserBase, table=True):
         sa_type=DateTime(timezone=True),  # type: ignore
     )
     watchlists: list["Watchlist"] = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
+    sources: list["RetailerSource"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
     alert_events: list["AlertEvent"] = Relationship(

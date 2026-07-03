@@ -28,6 +28,17 @@ class DropSignalBase(SQLModel):
         default_factory=get_datetime_utc,
         sa_type=DateTime(timezone=True),  # type: ignore
     )
+    retrieved_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    processed_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    processing_status: str = Field(
+        default="processed", min_length=1, max_length=40, index=True
+    )
 
 
 class DropSignalCreate(DropSignalBase):
@@ -42,6 +53,9 @@ class DropSignalUpdate(SQLModel):
     source_type: str | None = Field(default=None, min_length=1, max_length=40)
     url: str | None = Field(default=None, max_length=2048)
     observed_at: datetime | None = None
+    retrieved_at: datetime | None = None
+    processed_at: datetime | None = None
+    processing_status: str | None = Field(default=None, min_length=1, max_length=40)
 
 
 class DropSignal(DropSignalBase, table=True):

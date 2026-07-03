@@ -21,7 +21,9 @@ class AlertEventBase(SQLModel):
     channel: str = Field(default="email", min_length=1, max_length=40, index=True)
     status: str = Field(min_length=1, max_length=40, index=True)
     sent_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    error_code: str | None = Field(default=None, max_length=80)
     error: str | None = Field(default=None, max_length=2048)
+    public_message: str | None = Field(default=None, max_length=255)
 
 
 class AlertEventCreate(AlertEventBase):
